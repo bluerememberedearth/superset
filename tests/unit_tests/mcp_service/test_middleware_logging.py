@@ -63,7 +63,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_logs_duration_and_success(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """on_call_tool records duration_ms and success=True on normal return."""
         middleware = LoggingMiddleware()
         ctx = _make_context(name="list_charts")
@@ -89,7 +89,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_logs_failure_on_exception(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """on_call_tool records success=False and error_type when tool raises."""
         middleware = LoggingMiddleware()
         ctx = _make_context(name="execute_sql")
@@ -110,7 +110,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_no_error_type_on_success(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """on_call_tool omits error_type from payload on success."""
         middleware = LoggingMiddleware()
         ctx = _make_context(name="list_charts")
@@ -126,7 +126,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_extracts_entity_ids(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """on_call_tool extracts dashboard_id, chart_id, dataset_id from params."""
         middleware = LoggingMiddleware()
         ctx = _make_context(
@@ -151,7 +151,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_resolves_call_tool_proxy(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """call_tool proxy is resolved to the actual tool name via mcp_tool."""
         middleware = LoggingMiddleware()
         ctx = _make_context(
@@ -171,7 +171,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_no_mcp_tool_for_direct_calls(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """Direct tool calls (not via proxy) omit mcp_tool from payload."""
         middleware = LoggingMiddleware()
         ctx = _make_context(name="list_charts")
@@ -188,7 +188,7 @@ class TestLoggingMiddlewareOnCallTool:
     @pytest.mark.asyncio
     async def test_on_call_tool_proxy_failure_captures_both_fields(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """call_tool proxy failure captures mcp_tool and error_type."""
         middleware = LoggingMiddleware()
         ctx = _make_context(
@@ -215,7 +215,7 @@ class TestLoggingMiddlewareOnMessage:
     @pytest.mark.asyncio
     async def test_on_message_logs_without_duration(
         self, mock_get_user_id, mock_event_logger
-    ):
+    ) -> None:
         """on_message logs with action=mcp_message and duration_ms=None."""
         middleware = LoggingMiddleware()
         ctx = _make_context(method="resources/read", name="instance/metadata")
@@ -237,7 +237,7 @@ class TestLoggingMiddlewareOnMessage:
 class TestResolveToolName:
     """Tests for LoggingMiddleware._resolve_tool_name()."""
 
-    def test_resolves_call_tool_proxy(self):
+    def test_resolves_call_tool_proxy(self) -> None:
         """Returns the real tool name when call_tool proxy is used."""
         assert (
             LoggingMiddleware._resolve_tool_name(
@@ -246,23 +246,23 @@ class TestResolveToolName:
             == "list_datasets"
         )
 
-    def test_returns_none_for_direct_tool(self):
+    def test_returns_none_for_direct_tool(self) -> None:
         """Returns None for direct tool calls (not via proxy)."""
         assert LoggingMiddleware._resolve_tool_name("list_charts", {"page": 1}) is None
 
-    def test_returns_none_when_name_missing(self):
+    def test_returns_none_when_name_missing(self) -> None:
         """Returns None when call_tool params lack 'name'."""
         assert LoggingMiddleware._resolve_tool_name("call_tool", {"foo": "bar"}) is None
 
-    def test_returns_none_for_empty_name(self):
+    def test_returns_none_for_empty_name(self) -> None:
         """Returns None when call_tool params have empty 'name'."""
         assert LoggingMiddleware._resolve_tool_name("call_tool", {"name": ""}) is None
 
-    def test_returns_none_for_non_string_name(self):
+    def test_returns_none_for_non_string_name(self) -> None:
         """Returns None when call_tool name param is not a string."""
         assert LoggingMiddleware._resolve_tool_name("call_tool", {"name": 123}) is None
 
-    def test_returns_none_for_search_tools(self):
+    def test_returns_none_for_search_tools(self) -> None:
         """search_tools proxy is not resolved (no underlying tool name)."""
         assert (
             LoggingMiddleware._resolve_tool_name("search_tools", {"query": "datasets"})
@@ -270,11 +270,45 @@ class TestResolveToolName:
         )
 
 
+
+class TestIsErrorResponse:
+    """Tests for LoggingMiddleware._is_error_response()."""
+
+    def test_returns_true_for_error_schema_response(self) -> None:
+        """Returns True when result content contains error_type JSON field."""
+        from unittest.mock import MagicMock
+        middleware = LoggingMiddleware()
+        result = MagicMock()
+        result.content = [MagicMock(text='{"error_type": "ChartError", "message": "failed"}')]
+        assert middleware._is_error_response(result) is True
+
+    def test_returns_false_for_success_response(self) -> None:
+        """Returns False when result content contains no error_type field."""
+        from unittest.mock import MagicMock
+        middleware = LoggingMiddleware()
+        result = MagicMock()
+        result.content = [MagicMock(text='{"data": [1, 2, 3]}')]
+        assert middleware._is_error_response(result) is False
+
+    def test_returns_false_for_non_tool_result(self) -> None:
+        """Returns False gracefully when result is not a ToolResult."""
+        middleware = LoggingMiddleware()
+        assert middleware._is_error_response("not a ToolResult") is False  # type: ignore[arg-type]
+
+    def test_returns_false_for_empty_content(self) -> None:
+        """Returns False when result has no content items."""
+        from unittest.mock import MagicMock
+        middleware = LoggingMiddleware()
+        result = MagicMock()
+        result.content = []
+        assert middleware._is_error_response(result) is False
+
+
 class TestExtractContextInfo:
     """Tests for LoggingMiddleware._extract_context_info()."""
 
     @patch("superset.mcp_service.middleware.get_user_id", return_value=99)
-    def test_extract_with_metadata_agent_id(self, mock_get_user_id):
+    def test_extract_with_metadata_agent_id(self, mock_get_user_id) -> None:
         """Extracts agent_id from context.metadata."""
         middleware = LoggingMiddleware()
         ctx = _make_context(metadata={"agent_id": "agent-123"})
@@ -290,7 +324,7 @@ class TestExtractContextInfo:
         "superset.mcp_service.middleware.get_user_id",
         side_effect=RuntimeError("no Flask request context"),
     )
-    def test_extract_handles_missing_user(self, mock_get_user_id):
+    def test_extract_handles_missing_user(self, mock_get_user_id) -> None:
         """Gracefully handles missing user context."""
         middleware = LoggingMiddleware()
         ctx = _make_context()
@@ -302,7 +336,7 @@ class TestExtractContextInfo:
         assert user_id is None
 
     @patch("superset.mcp_service.middleware.get_user_id", return_value=1)
-    def test_extract_slice_id_from_chart_id(self, mock_get_user_id):
+    def test_extract_slice_id_from_chart_id(self, mock_get_user_id) -> None:
         """Extracts slice_id from chart_id param (alias)."""
         middleware = LoggingMiddleware()
         ctx = _make_context(params={"chart_id": 55})
@@ -312,7 +346,7 @@ class TestExtractContextInfo:
         assert slice_id == 55
 
     @patch("superset.mcp_service.middleware.get_user_id", return_value=1)
-    def test_extract_slice_id_from_slice_id(self, mock_get_user_id):
+    def test_extract_slice_id_from_slice_id(self, mock_get_user_id) -> None:
         """Extracts slice_id from slice_id param (fallback)."""
         middleware = LoggingMiddleware()
         ctx = _make_context(params={"slice_id": 66})

@@ -16,6 +16,7 @@
 # under the License.
 
 import logging
+import secrets
 import time
 from collections import defaultdict
 from typing import Any, Awaitable, Callable, Dict, Protocol, Sequence
@@ -112,10 +113,15 @@ def _sanitize_params(params: dict[str, Any]) -> dict[str, Any]:
     """Remove sensitive fields from params before logging."""
     if not isinstance(params, dict):
         return params
-    return {
-        k: "[REDACTED]" if k.lower() in _SENSITIVE_PARAM_KEYS else v
-        for k, v in params.items()
-    }
+    result = {}
+    for k, v in params.items():
+        if k.lower() in _SENSITIVE_PARAM_KEYS:
+            result[k] = "[REDACTED]"
+        elif k == "arguments" and isinstance(v, dict):
+            result[k] = _sanitize_params(v)
+        else:
+            result[k] = v
+    return result
 
 
 class LoggingMiddleware(Middleware):
@@ -136,9 +142,8 @@ class LoggingMiddleware(Middleware):
     in the curated payload).
     """
 
-    #: Default proxy names used by FastMCP tool-search transforms.
+    #: Proxy name used by FastMCP tool-search transforms.
     _CALL_TOOL_PROXY = "call_tool"
-    _SEARCH_TOOLS_PROXY = "search_tools"
 
     def _extract_context_info(
         self, context: MiddlewareContext
@@ -166,8 +171,20 @@ class LoggingMiddleware(Middleware):
             dataset_id = params.get("dataset_id")
         return agent_id, user_id, dashboard_id, slice_id, dataset_id, params
 
-    @staticmethod
-    def _resolve_tool_name(tool_name: str | None, params: dict[str, Any]) -> str | None:
+    def _is_error_response(self, result: ToolResult) -> bool:
+        """Check if a tool result contains an error schema response.
+
+        MCP tools return error schemas (ChartError, DashboardError, etc.)
+        instead of raising exceptions. These serialize to JSON containing
+        an "error_type" field.
+        """
+        try:
+            return '"error_type"' in result.content[0].text
+        except (AttributeError, IndexError):
+            return False
+
+        @staticmethod
+    def _resolve_tool_name(tool_name: str | None, params: Any) -> str | None:
         """Resolve the underlying tool name from call_tool proxy arguments.
 
         When tool search is enabled, the MCP client uses the ``call_tool``
@@ -200,12 +217,21 @@ class LoggingMiddleware(Middleware):
         tool_name = getattr(context.message, "name", None)
         mcp_tool = self._resolve_tool_name(tool_name, params)
 
+        mcp_call_id = secrets.token_hex(16)
+        context.mcp_call_id = mcp_call_id
         start_time = time.time()
         success = False
         error_type: str | None = None
         try:
             result = await call_next(context)
-            success = True
+            success = not self._is_error_response(result)
+            if isinstance(result, ToolResult):
+                existing_meta = result.meta or {}
+                result = ToolResult(
+                    content=result.content,
+                    meta={**existing_meta, "mcp_call_id": mcp_call_id},
+                    structured_content=result.structured_content,
+                )
             return result
         except Exception as exc:
             error_type = type(exc).__name__
@@ -213,6 +239,7 @@ class LoggingMiddleware(Middleware):
         finally:
             duration_ms = int((time.time() - start_time) * 1000)
             payload: dict[str, Any] = {
+                "mcp_call_id": mcp_call_id,
                 "tool": tool_name,
                 "agent_id": agent_id,
                 "params": _sanitize_params(params),
@@ -236,12 +263,17 @@ class LoggingMiddleware(Middleware):
                     referrer=None,
                     curated_payload=payload,
                 )
+            extra_parts = []
+            if mcp_tool is not None:
+                extra_parts.append(f"mcp_tool={mcp_tool}")
+            if error_type is not None:
+                extra_parts.append(f"error_type={error_type}")
+            extra = (", " + ", ".join(extra_parts)) if extra_parts else ""
             logger.info(
-                "MCP tool call: tool=%s, mcp_tool=%s, agent_id=%s, user_id=%s, "
-                "method=%s, dashboard_id=%s, slice_id=%s, dataset_id=%s, "
-                "duration_ms=%s, success=%s, error_type=%s",
+                "MCP tool call: tool=%s, agent_id=%s, user_id=%s, method=%s, "
+                "dashboard_id=%s, slice_id=%s, dataset_id=%s, duration_ms=%s, "
+                "success=%s, mcp_call_id=%s%s",
                 tool_name,
-                mcp_tool,
                 agent_id,
                 user_id,
                 context.method,
@@ -250,7 +282,8 @@ class LoggingMiddleware(Middleware):
                 dataset_id,
                 duration_ms,
                 success,
-                error_type,
+                mcp_call_id,
+                extra,
             )
 
     async def on_message(
