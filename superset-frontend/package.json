@@ -419,7 +419,8 @@
     "@jest/types": "^30.4.0",
     "jest-util": "^30.4.0",
     "jest-circus": "^30.4.0",
-    "jest-environment-node": "^30.4.0"
+    "jest-environment-node": "^30.4.0",
+    "axios": "^1.7.4"
   },
   "readme": "ERROR: No README data found!",
   "scarfSettings": {
