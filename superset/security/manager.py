@@ -1488,10 +1488,8 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
         logger.info("Cleaning faulty perms")
         pvms = self.session.query(PermissionView).filter(
             or_(
-                PermissionView.permission  # pylint: disable=singleton-comparison
-                == None,  # noqa: E711
-                PermissionView.view_menu  # pylint: disable=singleton-comparison
-                == None,  # noqa: E711
+                PermissionView.permission.is_(None),
+                PermissionView.view_menu.is_(None),
             )
         )
         if deleted_count := pvms.delete():
