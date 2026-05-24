@@ -118,7 +118,7 @@ how to enable and use CSV upload.
 
 There are many possible causes for why a long-running query might time out.
 
-For running long query from Sql Lab, by default Superset allows it run as long as 6 hours before it
+For running a long query from SQL Lab, by default Superset allows it to run as long as 6 hours before it
 being killed by celery. If you want to increase the time for running query, you can specify the
 timeout in configuration. For example:
 
@@ -252,14 +252,14 @@ the community to contribute to this knowledge base.
 
 For a database engine to be supported in Superset through the SQLAlchemy connector, it requires
 having a Python compliant [SQLAlchemy dialect](https://docs.sqlalchemy.org/en/13/dialects/) as well
-as a [DBAPI driver](https://www.python.org/dev/peps/pep-0249/) defined. Database that have limited
+as a [DBAPI driver](https://www.python.org/dev/peps/pep-0249/) defined. Databases that have limited
 SQL support may work as well. For instance it’s possible to connect to Druid through the SQLAlchemy
 connector even though Druid does not support joins and subqueries. Another key element for a
 database to be supported is through the Superset Database Engine Specification interface. This
 interface allows for defining database-specific configurations and logic that go beyond the
 SQLAlchemy and DBAPI scope. This includes features like:
 
-- date-related SQL function that allow Superset to fetch different time granularities when running
+- date-related SQL functions that allow Superset to fetch different time granularities when running
   time-series queries
 - whether the engine supports subqueries. If false, Superset may run 2-phase queries to compensate
   for the limitation
@@ -281,7 +281,7 @@ are typical in basic SQL:
 
 ## Does Superset offer a public API?
 
-Yes, a public REST API, and the surface of that API formal is expanding steadily. You can read more about this API and
+Yes, a public REST API, and the surface of that API is expanding steadily. You can read more about this API and
 interact with it using Swagger [here](/developer-docs/api).
 
 Some of the
