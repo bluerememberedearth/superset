@@ -280,21 +280,21 @@ class FilterOperator(StrEnum):
 
 
 class FilterStringOperators(StrEnum):
-    EQUALS = ("EQUALS",)
-    NOT_EQUALS = ("NOT_EQUALS",)
-    LESS_THAN = ("LESS_THAN",)
-    GREATER_THAN = ("GREATER_THAN",)
-    LESS_THAN_OR_EQUAL = ("LESS_THAN_OR_EQUAL",)
-    GREATER_THAN_OR_EQUAL = ("GREATER_THAN_OR_EQUAL",)
-    IN = ("IN",)
-    NOT_IN = ("NOT_IN",)
-    ILIKE = ("ILIKE",)
-    LIKE = ("LIKE",)
-    IS_NOT_NULL = ("IS_NOT_NULL",)
-    IS_NULL = ("IS_NULL",)
-    LATEST_PARTITION = ("LATEST_PARTITION",)
-    IS_TRUE = ("IS_TRUE",)
-    IS_FALSE = ("IS_FALSE",)
+    EQUALS = "EQUALS"
+    NOT_EQUALS = "NOT_EQUALS"
+    LESS_THAN = "LESS_THAN"
+    GREATER_THAN = "GREATER_THAN"
+    LESS_THAN_OR_EQUAL = "LESS_THAN_OR_EQUAL"
+    GREATER_THAN_OR_EQUAL = "GREATER_THAN_OR_EQUAL"
+    IN = "IN"
+    NOT_IN = "NOT_IN"
+    ILIKE = "ILIKE"
+    LIKE = "LIKE"
+    IS_NOT_NULL = "IS_NOT_NULL"
+    IS_NULL = "IS_NULL"
+    LATEST_PARTITION = "LATEST_PARTITION"
+    IS_TRUE = "IS_TRUE"
+    IS_FALSE = "IS_FALSE"
 
 
 class PostProcessingBoxplotWhiskerType(StrEnum):
@@ -433,7 +433,7 @@ def cast_to_num(value: float | int | str | None) -> float | int | None:
 
 
 def cast_to_boolean(value: Any) -> bool | None:
-    """Casts a value to an int/float
+    """Casts a value to a boolean.
 
     >>> cast_to_boolean(1)
     True
@@ -450,8 +450,8 @@ def cast_to_boolean(value: Any) -> bool | None:
     >>> cast_to_boolean(None)
 
     :param value: value to be converted to boolean representation
-    :returns: value cast to `bool`. when value is 'true' or value that are not 0
-              converted into True. Return `None` if value is `None`
+    :returns: `True` for truthy values, `False` for falsy values,
+              or `None` if the input is `None`.
     """
     if value is None:
         return None
