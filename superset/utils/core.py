@@ -611,6 +611,7 @@ def sanitize_url(url: str) -> str:
 
 
 def readfile(file_path: str) -> str | None:
+    """Read a file and return its content as a string."""
     with open(file_path) as f:
         content = f.read()
     return content
@@ -751,6 +752,7 @@ timeout: type[TimerTimeout] | type[SigalrmTimeout] = (
 
 
 def pessimistic_connection_handling(some_engine: Engine) -> None:
+    """Set up pessimistic disconnect handling for a SQLAlchemy engine."""
     @event.listens_for(some_engine, "engine_connect")
     def ping_connection(connection: Connection, branch: bool) -> None:
         if branch:
@@ -1234,36 +1236,44 @@ def get_example_default_schema() -> str | None:
 
 
 def backend() -> str:
+    """Return the backend name of the example database."""
     return get_example_database().backend
 
 
 def is_adhoc_metric(metric: Metric) -> TypeGuard[AdhocMetric]:
+    """Type guard that checks whether a metric is an adhoc metric."""
     return isinstance(metric, dict) and "expressionType" in metric
 
 
 def is_adhoc_column(column: Column) -> TypeGuard[AdhocColumn]:
+    """Type guard that checks whether a column is an adhoc column."""
     return isinstance(column, dict) and ({"label", "sqlExpression"}).issubset(
         column.keys()
     )
 
 
 def is_base_axis(column: Column) -> bool:
+    """Check whether a column has the BASE_AXIS column type."""
     return is_adhoc_column(column) and column.get("columnType") == "BASE_AXIS"
 
 
 def get_base_axis_columns(columns: list[Column] | None) -> list[Column]:
+    """Filter a list of columns to only those that are base axis columns."""
     return [column for column in columns or [] if is_base_axis(column)]
 
 
 def get_non_base_axis_columns(columns: list[Column] | None) -> list[Column]:
+    """Filter a list of columns to exclude base axis columns."""
     return [column for column in columns or [] if not is_base_axis(column)]
 
 
 def get_base_axis_labels(columns: list[Column] | None) -> tuple[str, ...]:
+    """Extract labels from all base axis columns."""
     return tuple(get_column_name(column) for column in get_base_axis_columns(columns))
 
 
 def get_x_axis_label(columns: list[Column] | None) -> str | None:
+    """Return the label of the first base axis column, or ``None``."""
     labels = get_base_axis_labels(columns)
     return labels[0] if labels else None
 
@@ -1572,6 +1582,7 @@ def LongText() -> Variant:  # pylint:disable=invalid-name  # noqa: N802
 
 
 def shortid() -> str:
+    """Generate a short 12-character identifier from a UUID."""
     return f"{uuid.uuid4()}"[-12:]
 
 
@@ -1829,6 +1840,7 @@ def extract_column_dtype(col: ColumnMetadata) -> GenericDataType:
 
 
 def is_test() -> bool:
+    """Return ``True`` if the SUPERSET_TESTENV environment variable is set."""
     return parse_boolean_string(os.environ.get("SUPERSET_TESTENV", "false"))
 
 
@@ -1880,6 +1892,7 @@ def get_time_filter_status(
 
 
 def format_list(items: Sequence[str], sep: str = ", ", quote: str = '"') -> str:
+    """Format a sequence of strings as a quoted, separated list."""
     quote_escaped = "\\" + quote
     return sep.join(f"{quote}{x.replace(quote, quote_escaped)}{quote}" for x in items)
 
@@ -2082,6 +2095,7 @@ def apply_max_row_limit(
 
 
 def create_zip(files: dict[str, Any]) -> BytesIO:
+    """Create an in-memory ZIP archive from a mapping of filenames to contents."""
     buf = BytesIO()
     with ZipFile(buf, "w") as bundle:
         for filename, contents in files.items():
@@ -2126,6 +2140,7 @@ def remove_extra_adhoc_filters(form_data: dict[str, Any]) -> None:
 
 
 def to_int(v: Any, value_if_invalid: int = 0) -> int:
+    """Safely convert a value to an integer, returning a default on failure."""
     try:
         return int(v)
     except (ValueError, TypeError):
@@ -2133,6 +2148,7 @@ def to_int(v: Any, value_if_invalid: int = 0) -> int:
 
 
 def get_query_source_from_request() -> QuerySource | None:
+    """Determine the query source based on the HTTP request referrer."""
     if not request or not request.referrer:
         return None
     if "/superset/dashboard/" in request.referrer:
