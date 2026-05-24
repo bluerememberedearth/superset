@@ -29,7 +29,7 @@ under the License.
 [![Last Commit](https://img.shields.io/github/last-commit/apache/superset)](https://github.com/apache/superset/commits/master)
 [![Open Issues](https://img.shields.io/github/issues/apache/superset)](https://github.com/apache/superset/issues)
 [![Open PRs](https://img.shields.io/github/issues-pr/apache/superset)](https://github.com/apache/superset/pulls)
-[![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](http://bit.ly/join-superset-slack)
+[![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://superset.apache.org/community/)
 [![Documentation](https://img.shields.io/badge/docs-apache.org-blue.svg)](https://superset.apache.org)
 
 <picture width="500">
@@ -177,7 +177,7 @@ Here are some of the major database solutions that are supported:
 
 **A more comprehensive list of supported databases** along with the configuration instructions can be found [here](https://superset.apache.org/docs/databases).
 
-Want to add support for your datastore or data engine? Read more [here](https://superset.apache.org/docs/frequently-asked-questions#does-superset-work-with-insert-database-engine-here) about the technical requirements.
+Want to add support for your datastore or data engine? Read more [here](https://superset.apache.org/docs/databases/) about the technical requirements.
 
 ## Installation and Configuration
 
@@ -186,7 +186,7 @@ Try out Superset's [quickstart](https://superset.apache.org/docs/quickstart/) gu
 ## Get Involved
 
 - Ask and answer questions on [StackOverflow](https://stackoverflow.com/questions/tagged/apache-superset) using the **apache-superset** tag
-- [Join our community's Slack](http://bit.ly/join-superset-slack)
+- [Join our community's Slack](https://superset.apache.org/community/)
   and please read our [Slack Community Guidelines](https://github.com/apache/superset/blob/master/CODE_OF_CONDUCT.md#slack-community-guidelines)
 - [Join our dev@superset.apache.org Mailing list](https://lists.apache.org/list.html?dev@superset.apache.org). To join, simply send an email to [dev-subscribe@superset.apache.org](mailto:dev-subscribe@superset.apache.org)
 - If you want to help troubleshoot GitHub Issues involving the numerous database drivers that Superset supports, please consider adding your name and the databases you have access to on the [Superset Database Familiarity Rolodex](https://docs.google.com/spreadsheets/d/1U1qxiLvOX0kBTUGME1AHHi6Ywel6ECF8xk_Qy-V9R8c/edit#gid=0)
@@ -214,7 +214,7 @@ Understanding the Superset Points of View
 
 - Getting Started with Superset
   - [Superset in 2 Minutes using Docker Compose](https://superset.apache.org/docs/installation/docker-compose#installing-superset-locally-using-docker-compose)
-  - [Installing Database Drivers](https://superset.apache.org/docs/configuration/databases#installing-database-drivers)
+  - [Installing Database Drivers](https://superset.apache.org/docs/databases/)
   - [Building New Database Connectors](https://preset.io/blog/building-database-connector/)
   - [Create Your First Dashboard](https://superset.apache.org/docs/using-superset/creating-your-first-dashboard/)
   - [Comprehensive Tutorial for Contributing Code to Apache Superset
@@ -236,11 +236,11 @@ Understanding the Superset Points of View
 
 - Visualizations
 
-  - [Creating Viz Plugins](https://superset.apache.org/docs/contributing/creating-viz-plugins/)
+  - [Creating Viz Plugins](https://superset.apache.org/docs/contributing/howtos/)
   - [Managing and Deploying Custom Viz Plugins](https://medium.com/nmc-techblog/apache-superset-manage-custom-viz-plugins-in-production-9fde1a708e55)
   - [Why Apache Superset is Betting on Apache ECharts](https://preset.io/blog/2021-4-1-why-echarts/)
 
-- [Superset API](https://superset.apache.org/docs/rest-api)
+- [Superset API](https://superset.apache.org/docs/api/)
 
 ## Repo Activity
 
