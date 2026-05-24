@@ -29,7 +29,7 @@ under the License.
 [![Last Commit](https://img.shields.io/github/last-commit/apache/superset)](https://github.com/apache/superset/commits/master)
 [![Open Issues](https://img.shields.io/github/issues/apache/superset)](https://github.com/apache/superset/issues)
 [![Open PRs](https://img.shields.io/github/issues-pr/apache/superset)](https://github.com/apache/superset/pulls)
-[![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](http://bit.ly/join-superset-slack)
+[![Get on Slack](https://img.shields.io/badge/slack-join-orange.svg)](https://superset.apache.org/community)
 [![Documentation](https://img.shields.io/badge/docs-apache.org-blue.svg)](https://superset.apache.org)
 
 <picture width="500">
@@ -186,11 +186,11 @@ Try out Superset's [quickstart](https://superset.apache.org/docs/quickstart/) gu
 ## Get Involved
 
 - Ask and answer questions on [StackOverflow](https://stackoverflow.com/questions/tagged/apache-superset) using the **apache-superset** tag
-- [Join our community's Slack](http://bit.ly/join-superset-slack)
+- [Join our community's Slack](https://superset.apache.org/community)
   and please read our [Slack Community Guidelines](https://github.com/apache/superset/blob/master/CODE_OF_CONDUCT.md#slack-community-guidelines)
 - [Join our dev@superset.apache.org Mailing list](https://lists.apache.org/list.html?dev@superset.apache.org). To join, simply send an email to [dev-subscribe@superset.apache.org](mailto:dev-subscribe@superset.apache.org)
 - If you want to help troubleshoot GitHub Issues involving the numerous database drivers that Superset supports, please consider adding your name and the databases you have access to on the [Superset Database Familiarity Rolodex](https://docs.google.com/spreadsheets/d/1U1qxiLvOX0kBTUGME1AHHi6Ywel6ECF8xk_Qy-V9R8c/edit#gid=0)
-- Join Superset's Town Hall and [Operational Model](https://preset.io/blog/the-superset-operational-model-wants-you/) recurring meetings. Meeting info is available on the [Superset Community Calendar](https://superset.apache.org/community)
+- Join Superset's Town Hall and [Operational Model](https://web.archive.org/web/20260209052903/https://preset.io/blog/the-superset-operational-model-wants-you/) recurring meetings. Meeting info is available on the [Superset Community Calendar](https://superset.apache.org/community)
 
 ## Contributor Guide
 
@@ -209,36 +209,35 @@ how to set up a development environment.
 
 Understanding the Superset Points of View
 
-- [The Case for Dataset-Centric Visualization](https://preset.io/blog/dataset-centric-visualization/)
-- [Understanding the Superset Semantic Layer](https://preset.io/blog/understanding-superset-semantic-layer/)
+- [The Case for Dataset-Centric Visualization](https://web.archive.org/web/20260325091915/https://preset.io/blog/dataset-centric-visualization/)
+- [Understanding the Superset Semantic Layer](https://web.archive.org/web/20260209051116/https://preset.io/blog/understanding-superset-semantic-layer/)
 
 - Getting Started with Superset
   - [Superset in 2 Minutes using Docker Compose](https://superset.apache.org/docs/installation/docker-compose#installing-superset-locally-using-docker-compose)
   - [Installing Database Drivers](https://superset.apache.org/docs/configuration/databases#installing-database-drivers)
-  - [Building New Database Connectors](https://preset.io/blog/building-database-connector/)
+  - [Building New Database Connectors](https://web.archive.org/web/20250119002511/https://preset.io/blog/building-database-connector/)
   - [Create Your First Dashboard](https://superset.apache.org/docs/using-superset/creating-your-first-dashboard/)
-  - [Comprehensive Tutorial for Contributing Code to Apache Superset
-    ](https://preset.io/blog/tutorial-contributing-code-to-apache-superset/)
-- [Resources to master Superset by Preset](https://preset.io/resources/)
+  - [Comprehensive Tutorial for Contributing Code to Apache Superset](https://web.archive.org/web/20260315044442/https://preset.io/blog/tutorial-contributing-code-to-apache-superset/)
+- [Resources to master Superset](https://web.archive.org/web/20260325085729/https://preset.io/resources/)
 
 - Deploying Superset
 
   - [Official Docker image](https://hub.docker.com/r/apache/superset)
   - [Helm Chart](https://github.com/apache/superset/tree/master/helm/superset)
 
-- Recordings of Past [Superset Community Events](https://preset.io/events)
+- Recordings of Past [Superset Community Events](https://web.archive.org/web/20260325085729/https://preset.io/events/)
 
-  - [Mixed Time Series Charts](https://preset.io/events/mixed-time-series-visualization-in-superset-workshop/)
-  - [How the Bing Team Customized Superset for the Internal Self-Serve Data & Analytics Platform](https://preset.io/events/how-the-bing-team-heavily-customized-superset-for-their-internal-data/)
-  - [Live Demo: Visualizing MongoDB and Pinot Data using Trino](https://preset.io/events/2021-04-13-visualizing-mongodb-and-pinot-data-using-trino/)
-  - [Introduction to the Superset API](https://preset.io/events/introduction-to-the-superset-api/)
-  - [Building a Database Connector for Superset](https://preset.io/events/2021-02-16-building-a-database-connector-for-superset/)
+  - [Mixed Time Series Charts](https://www.youtube.com/watch?v=Un3mciXhPVY)
+  - [How the Bing Team Customized Superset for the Internal Self-Serve Data & Analytics Platform](https://www.youtube.com/watch?v=RY0SSvSUkMA)
+  - [Live Demo: Visualizing MongoDB and Pinot Data using Trino](https://www.youtube.com/watch?v=Dw_al_26F6o)
+  - [Introduction to the Superset API](https://www.youtube.com/watch?v=vFTI087HYNE)
+  - [Building a Database Connector for Superset](https://www.youtube.com/watch?v=lk_sfZq-hrU)
 
 - Visualizations
 
   - [Creating Viz Plugins](https://superset.apache.org/docs/contributing/creating-viz-plugins/)
   - [Managing and Deploying Custom Viz Plugins](https://medium.com/nmc-techblog/apache-superset-manage-custom-viz-plugins-in-production-9fde1a708e55)
-  - [Why Apache Superset is Betting on Apache ECharts](https://preset.io/blog/2021-4-1-why-echarts/)
+  - [Why Apache Superset is Betting on Apache ECharts](https://web.archive.org/web/20260315044418/https://preset.io/blog/2021-4-1-why-echarts/)
 
 - [Superset API](https://superset.apache.org/docs/rest-api)
 
