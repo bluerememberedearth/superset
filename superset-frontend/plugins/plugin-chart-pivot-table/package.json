@@ -31,7 +31,7 @@
     "@apache-superset/core": "*",
     "@superset-ui/chart-controls": "*",
     "@superset-ui/core": "*",
-    "lodash": "^4.18.1",
+    "lodash": "^4.17.21",
     "prop-types": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
