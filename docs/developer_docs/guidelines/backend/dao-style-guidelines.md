@@ -26,7 +26,7 @@ under the License.
 
 A Data Access Object (DAO) is a pattern that provides an abstract interface to the SQLAlchemy Object Relational Mapper (ORM). The DAOs are critical as they form the building block of the application which are wrapped by the associated commands and RESTful API endpoints.
 
-There are numerous inconsistencies and violations of the DRY principal within the codebase as it relates to DAOs and ORMs—unnecessary commits, non-ACID transactions, etc.—which makes the code unnecessarily complex and convoluted. Addressing the underlying issues with the DAOs _should_ help simplify the downstream operations and improve the developer experience.
+There are numerous inconsistencies and violations of the DRY principle within the codebase as it relates to DAOs and ORMs—unnecessary commits, non-ACID transactions, etc.—which makes the code unnecessarily complex and convoluted. Addressing the underlying issues with the DAOs _should_ help simplify the downstream operations and improve the developer experience.
 
 To ensure consistency the following rules should be adhered to:
 
